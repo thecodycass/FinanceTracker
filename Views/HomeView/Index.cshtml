@@ -1,0 +1,39 @@
+﻿@model FinanceTracker.Models.HomeViewModel;
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <div id="billsChart"></div>
+</div>
+
+@section Scripts {
+    <script src="~/js/apexcharts.min.js"></script>
+    <script>
+        let billsData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Bills.Select(b => new { 
+            name = b.name, 
+            amount = b.amount 
+        })));
+        
+        let options = {
+            series: [{
+                name: 'Amount',
+                data: billsData.map(b => b.amount) ,
+                color: '#767e8d',
+            }],
+            chart: {
+                type: 'bar',
+                height: 500,
+            },
+            xaxis: {
+                categories: billsData.map(b => b.name)
+            },
+            title: {
+                text: 'Bills By Amount'
+            },
+        };
+        
+        let chart = new ApexCharts(document.querySelector("#billsChart"), options);
+        chart.render();
+    </script>
+}

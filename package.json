@@ -1,0 +1,23 @@
+{
+  "name": "financetracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "tailwindcss -i ./wwwroot/css/app.css -o ./wwwroot/FinanceTracker.styles.css",
+    "watch-css": "tailwindcss -i ./wwwroot/css/app.css -o ./wwwroot/FinanceTracker.styles.css --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.16",
+    "cross-env": "^10.1.0",
+    "tailwindcss": "^4.1.16"
+  },
+  "dependencies": {
+    "apexcharts": "^5.3.6"
+  }
+}

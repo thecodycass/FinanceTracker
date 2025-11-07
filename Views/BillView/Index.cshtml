@@ -1,0 +1,181 @@
+@using FinanceTracker.Controllers.API
+@using FinanceTracker.Entities
+@using FinanceTracker.Entities.Enums;
+@model FinanceTracker.Models.BillViewModel;
+
+@{
+    ViewData["Title"] = "Bills";
+    var weekly = Model.WeeklyAmount.ToString("c");
+    var nextWeek = Model.BillsDueNextWeek.Sum(b => b.amount).ToString("c");
+    var monthly = Model.MonthlyAmount.ToString("c");
+    var yearly = Model.YearlyAmount.ToString("c");
+}
+
+<div class="relative left-1/2 -translate-x-1/2 w-screen px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 mb-0">@ViewData["Title"]</h1>
+        <a asp-action="Create" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors">Create New Bill</a>
+    </div>
+
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Quick View</h2>
+        <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-green-50">Due This Week</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-yellow-50">Due Next Week</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50">Due This Month</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50">Yearly Payments</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@weekly</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@nextWeek</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@monthly</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@yearly</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Bills Due This Week</h2>
+        <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-green-50">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-green-50">Description</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-green-50">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-green-50">Due Date</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var bill in @Model.BillsDueThisWeek)
+                    {
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@bill.name</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@bill.description</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@bill.amount.ToString("c")</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@bill.dueDate.ToString("d")</td>
+                        </tr>
+                    }
+                    <tr class="bg-gray-50 font-semibold">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">Total:</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">@weekly</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Bills Due Next Week</h2>
+        <div class="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-yellow-50">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-yellow-50">Description</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-yellow-50">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-yellow-50">Due Date</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var bill in @Model.BillsDueNextWeek)
+                    {
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">@bill.name</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@bill.description</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@bill.amount.ToString("c")</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@bill.dueDate.ToString("d")</td>
+                        </tr>
+                    }
+                    <tr class="bg-gray-50 font-semibold">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">Total:</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">@nextWeek</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">All Bills</h2>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50">Due Date</th>
+            
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50">Notify Day Before</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50">Notify Day Of</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50"></th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-blue-50"></th>
+                    </tr>
+                </thead>
+                <tbody class="overflow-auto divide-y divide-gray-200">
+                    @foreach (var bill in @Model.Bills)
+                    {
+                        var statusColor = "";
+                        var statusTextColor = "text-gray-900";
+                        switch (bill.status.ToLower())
+                        {
+                            case BillStatusType.PARTIAL:
+                                statusColor = "bg-yellow-50";
+                                statusTextColor = "text-yellow-800";
+                                break;
+
+                            case BillStatusType.CANCELLED:
+                                statusColor = "bg-red-50";
+                                statusTextColor = "text-red-800";
+                                break;
+                            default:
+                                statusColor = "";
+                                statusTextColor = "text-gray-900";
+                                break;
+                        }
+
+                        var notifyDayOfColor = bill.notifyOnDay ? "text-green-600" : "text-red-600";
+                        var notifyDayBeforeColor = bill.notifyOneDayBefore ? "text-green-600" : "text-red-600";
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@bill.name</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@bill.amount.ToString("c")</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm @statusTextColor @statusColor rounded-md">@bill.status.ToUpper()</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@bill.dueDate.ToString("d")</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center @notifyDayBeforeColor">@bill.notifyOneDayBefore</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-center @notifyDayOfColor">@bill.notifyOnDay</td>
+                            <td class="px-1 py-4 whitespace-nowrap text-sm text-center">
+                                <a asp-action="Edit" asp-route-id="@bill.id" class="text-gray-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-pen-icon lucide-square-pen">
+                                        <path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/>
+                                    </svg>
+                                </a>
+                            </td>
+                            <td class="px-1 py-4 whitespace-nowrap text-sm">
+                                <a asp-action="Delete" asp-route-id="@bill.id" class="text-gray-600 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2">
+                                        <path d="M10 11v6"/>
+                                        <path d="M14 11v6"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                        <path d="M3 6h18"/>
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </a>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+@model FinanceTracker.Entities.Bill
+@{
+    ViewData["Title"] = "Create Bill";
+}
+
+<h2>@ViewData["Title"]</h2>
+@await Html.PartialAsync("_BillForm", Model)

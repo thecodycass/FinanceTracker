@@ -1,0 +1,7 @@
+@model FinanceTracker.Entities.Bill
+@{
+    ViewData["Title"] = $"Edit Bill - {Model.name}";
+}
+
+<h2>@ViewData["Title"]</h2>
+@await Html.PartialAsync("_BillForm", Model)
